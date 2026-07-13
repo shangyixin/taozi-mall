@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taozi.mapper.OrderMapper">
+
+    <insert id="insert" parameterType="com.taozi.entity.Order" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `order` (order_no, user_id, total_price, status)
+        VALUES (#{orderNo}, #{userId}, #{totalPrice}, #{status})
+    </insert>
+
+    <insert id="insertItem" parameterType="com.taozi.entity.OrderItem">
+        INSERT INTO order_item (order_id, product_id, product_name, price, quantity)
+        VALUES (#{orderId}, #{productId}, #{productName}, #{price}, #{quantity})
+    </insert>
+
+    <resultMap id="orderMap" type="com.taozi.entity.Order">
+        <id property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <select id="findByUserId" resultMap="orderMap">
+        SELECT * FROM `order` WHERE user_id = #{userId} ORDER BY id DESC
+    </select>
+
+    <select id="findById" resultMap="orderMap">
+        SELECT * FROM `order` WHERE id = #{id}
+    </select>
+
+    <select id="findItemsByOrderId" resultType="com.taozi.entity.OrderItem">
+        SELECT * FROM order_item WHERE order_id = #{orderId}
+    </select>
+
+</mapper>
